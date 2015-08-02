@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1"
+  metadata-complete="true">
+  
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>HelloServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Test2</servlet-name>
+        <servlet-class>foo.Test2</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/HelloServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Test2</servlet-name>
+        <url-pattern>/Test2</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>HelloTemplateServlet</servlet-name>
+        <servlet-class>HelloTemplateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelloTemplateServlet</servlet-name>
+        <url-pattern>/HelloTemplateServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Test</servlet-name>
+        <servlet-class>Test</servlet-class>
+    </servlet>
+        <servlet-mapping>
+        <servlet-name>Test</servlet-name>
+        <url-pattern>/Test</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DaoTest</servlet-name>
+        <servlet-class>DaoTest</servlet-class>
+    </servlet>
+        <servlet-mapping>
+        <servlet-name>DaoTest</servlet-name>
+        <url-pattern>/DaoTest</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>TestMoneyManagerController</servlet-name>
+        <servlet-class>moneymanager.controller.TestMoneyManagerController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestMoneyManagerController</servlet-name>
+        <url-pattern>/testmoneymanager</url-pattern>
+    </servlet-mapping>
+</web-app>

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title th:text="${title}">タイトル</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  </head>
+
+  <body>
+    <p th:if="${is_exact_param!=null}">
+        <span th:if="${is_exact_param and is_success_add_item}">データの送信に成功しました</span>
+        <span th:if="${is_exact_param and not is_success_add_item}">データの送信に失敗しました</span>
+        <span th:if="${not is_exact_param}">データの書式が間違っています</span>
+    </p>
+    
+    <table>
+        <form method="POST" action="testmoneymanager">
+            <tr><th>入力フォーム</th></tr>
+            <tr><td><span>日付:</span><input type="text" name="date" size="10"/><span> 入力例: 2015-08-01</span></td></tr>
+            <tr><td><span>品目:</span><input type="text" name="name" size="10"/><span> 入力例: 食費</span></td></tr>
+            <tr><td><span>金額:</span><input type="text" name="value" size="10"/><span> 入力例: 500</span></td></tr>
+            <tr><td><input type="submit" value="送信" /></td></tr>
+        </form>
+    </table>
+    <br />
+    <p>///////////////////////////////////////////////</p>
+    <br />
+    <table border="1px" th:each="key : ${map.keySet()}" th:with="items=${map.get(key)}">
+      <tr><th colspan="2" th:text="${key}">yyyy-mm-dd</th></tr>
+      <tr><th>品目</th><th>金額</th></tr>
+      <tr th:each="item: ${items}">
+        <td th:text="${item.name}">品目</td>
+        <td th:text="${item.value}">金額</td>
+      </tr>
+    </table>
+  </body>
+</html>

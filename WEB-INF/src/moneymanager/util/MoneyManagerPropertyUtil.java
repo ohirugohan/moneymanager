@@ -1,11 +1,11 @@
 package moneymanager.util;
 
-import java.util.*;
-import java.lang.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class MoneyManagerPropertyUtil {
-    
+
     public Properties getProperties()
     {
         Properties props = new Properties();

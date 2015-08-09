@@ -1,8 +1,8 @@
 package moneymanager.util;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class ValidationUtil {
@@ -11,7 +11,7 @@ public class ValidationUtil {
         if (param == null || param.length() == 0) {
             return false;
         }
-        
+
         try {
             int numberParam = Integer.parseInt(param);
             if (numberParam < 0) {
@@ -20,17 +20,17 @@ public class ValidationUtil {
         } catch (NumberFormatException e) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     public static boolean validateDate(String param) {
         if (param == null || param.length() == 0) {
             return false;
         }
-        
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         try {
             Date result = formatter.parse(param);
             formatter.setLenient(false);
@@ -41,12 +41,12 @@ public class ValidationUtil {
             return false;
         }
     }
-    
+
     public static boolean validateString(String param) {
         if (param == null || param.length() == 0) {
             return false;
         }
-        
+
         return true;
     }
 

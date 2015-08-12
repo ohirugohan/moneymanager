@@ -1,96 +1,114 @@
 package moneymanager.dataaccess;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Function;
 
-import moneymanager.entity.ItemEntity;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import moneymanager.util.MoneyManagerPropertyUtil;
 
 abstract class AbstractDao {
 
+    private Connection connection;
+
     public AbstractDao() {
         Properties properties = new MoneyManagerPropertyUtil().getProperties();
-        String dbhost = properties.getProperty("dbhost");
-        String dbname = properties.getProperty("dbname");
-        String dbuser = properties.getProperty("dbuser");
-        String dbpw = properties.getProperty("dbpw");
+        String datasource_name = properties.getProperty("datasource_name");
+
+        try {
+            InitialContext ctx = new InitialContext();
+            DataSource ds = (DataSource)ctx.lookup("java:comp/env/" + datasource_name);
+            this.connection = ds.getConnection();
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-
-    public List<ItemEntity> getData()
-    {
+    /**
+     * 単一行を取得するSELECT文を実行し、結果を取得します。
+     * @param query SQLクエリ
+     * @param queryparameters プリペアドステートメントのためのクエリパラメーター
+     * @param convertFunc SELECTの実行結果をオブジェクト変換する関数
+     * @return
+     */
+    protected <T> T findOne(String query, Object[] queryparameters, Function<ResultSet, T> convertFunc ) {
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            PreparedStatement statement = (PreparedStatement)this.connection.prepareStatement(query);
+            statement = this.setQueryParameters(statement, queryparameters);
+            ResultSet result = statement.executeQuery();
 
-            Properties properties = new MoneyManagerPropertyUtil().getProperties();
-            String dbhost = properties.getProperty("dbhost");
-            String dbname = properties.getProperty("dbname");
-            String dbuser = properties.getProperty("dbuser");
-            String dbpw = properties.getProperty("dbpw");
-
-            // MySQLに接続
-            Connection con = DriverManager.getConnection("jdbc:mysql://" + dbhost + "/" + dbname, dbuser, dbpw);
-            // ステートメント生成
-            Statement stmt = con.createStatement();
-
-            // SQLを実行
-            String sqlStr = "SELECT * FROM items WHERE user_id = 0 ORDER BY date ASC;";
-            ResultSet rs = stmt.executeQuery(sqlStr);
-
-            List<ItemEntity> list = new ArrayList<>();
-
-            // 結果行をループ
-            while(rs.next()){
-                // レコードの値
-                list.add(new ItemEntity(rs.getInt("id"), rs.getInt("user_id"), rs.getDate("date"), rs.getString("name"), rs.getInt("value")));
+            if (result.first()) {
+                return convertFunc.apply(result);
+            } else {
+                return null;
             }
-
-            // 接続を閉じる
-            rs.close();
-            stmt.close();
-            con.close();
-
-            return list;
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-
-    public boolean insert(String date, String name, String value) {
+    /**
+     * SELECT文を実行し、結果を取得します。
+     *
+     * @param query SQLクエリ
+     * @param queryparameters プリペアドステートメントのためのクエリパラメーター
+     * @param convertFunc SELECTの実行結果をオブジェクト変換する関数
+     * @return
+     */
+    protected <T> List<T> findAll(String query, Object[] queryparameters, Function<ResultSet, T> convertFunc ) {
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            PreparedStatement statement = (PreparedStatement)this.connection.prepareStatement(query);
+            statement = this.setQueryParameters(statement, queryparameters);
+            ResultSet result = statement.executeQuery();
 
-            Properties properties = new MoneyManagerPropertyUtil().getProperties();
-            String dbhost = properties.getProperty("dbhost");
-            String dbname = properties.getProperty("dbname");
-            String dbuser = properties.getProperty("dbuser");
-            String dbpw = properties.getProperty("dbpw");
-
-            // MySQLに接続
-            Connection con = DriverManager.getConnection("jdbc:mysql://" + dbhost + "/" + dbname, dbuser, dbpw);
-            // ステートメント生成
-            Statement stmt = con.createStatement();
-
-            // SQLを実行
-            String sqlStr = "INSERT INTO items (user_id, date, type, name, value, register_time, update_time) "
-                         + "VALUES ('0', '" + date + "', 'expense', '" + name + "', '" + value + "', NOW(), NOW());";
-            int count = stmt.executeUpdate(sqlStr);
-
-            // 接続を閉じる
-            stmt.close();
-            con.close();
-
-            return count > 0;
-
-        } catch (Exception e) {
+            List<T> ret = new ArrayList<>();
+            while (result.next()) {
+                ret.add(convertFunc.apply(result));
+            }
+            return ret;
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * プリペアドステートメントをセットします。
+     * @param statement
+     * @param queryparameters
+     * @return PreparedStatement
+     * @throws SQLException
+     */
+    private PreparedStatement setQueryParameters(PreparedStatement statement, Object[] queryparameters) throws SQLException{
+        int i = 1;
+        for (Object param: queryparameters) {
+            if (param instanceof String) {
+                statement.setString(i, (String)param);
+            } else if(param instanceof Integer) {
+                statement.setInt(i, (Integer)param);
+            } else if(param instanceof Date) {
+                statement.setDate(i, (Date)param);
+            } else if(param instanceof Timestamp) {
+                statement.setTimestamp(i, (Timestamp)param);
+            } else if(param instanceof Boolean) {
+                statement.setBoolean(i, (Boolean)param);
+            }
+            else {
+                throw new RuntimeException("SQL実行時に、不正な型がプリペアドステートメントにセットされようとしました。");
+            }
+            i++;
+        }
+        return statement;
     }
 }

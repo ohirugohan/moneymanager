@@ -1,6 +1,7 @@
 package moneymanager.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +13,6 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 abstract class AbstractController extends HttpServlet {
-
     /**
      * get or post
      */
@@ -31,7 +31,6 @@ abstract class AbstractController extends HttpServlet {
     private HttpServletRequest request;
 
     private HttpServletResponse response;
-
 
     public AbstractController() {
         // テンプレートの設定
@@ -57,7 +56,10 @@ abstract class AbstractController extends HttpServlet {
         this.showTemplate();
     }
 
-    private void setCommonProperty(HttpServletRequest request, HttpServletResponse response, String mode){
+    private void setCommonProperty(HttpServletRequest request, HttpServletResponse response, String mode) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
         this.mode = mode;
         this.context = new WebContext(request, response, this.getServletContext(), request.getLocale());
         this.request = request;
@@ -99,6 +101,29 @@ abstract class AbstractController extends HttpServlet {
     protected String getMode()
     {
         return this.mode;
+    }
+
+    /**
+     * デバッグ用に文字列を出力します。
+     * @param text
+     */
+    protected void debug(String text) {
+        PrintWriter out;
+        try {
+            out = this.response.getWriter();
+            out.println(text);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * デバッグ用に文字列を出力します。
+     * @param number
+     */
+    protected void debug(int number) {
+        String text = Integer.toString(number);
+        this.debug(text);
     }
 
     /**

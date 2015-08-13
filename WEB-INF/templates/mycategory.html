@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>マイカテゴリー登録</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="./js/colorpicker/html5jp/cpick.js"></script>
+  </head>
+
+  <body>
+    <!--
+    <p th:if="${is_exact_param!=null}">
+        <span th:if="${is_exact_param and is_success_add_item}">データの送信に成功しました</span>
+        <span th:if="${is_exact_param and not is_success_add_item}">データの送信に失敗しました</span>
+        <span th:if="${not is_exact_param}">データの書式が間違っています</span>
+    </p>
+    -->
+
+    <table>
+        <form method="POST" action="mycategory">
+            <tr><th>入力フォーム</th></tr>
+            <tr><td><span>カテゴリー名:</span><input type="text" name="name" size="10"/></td></tr>
+            <tr><td><span>カラー:</span><input type="text" name="color" size="10" value="#ffffff" id="t1" class="html5jp-cpick [coloring:true]"/></td></tr>
+            <tr><td><input type="submit" value="送信" /></td></tr>
+        </form>
+    </table>
+
+
+    <br />
+    <p>///////////////////////////////////////////////</p>
+    <br />
+    <table border="1px">
+      <tr><th>カテゴリ</th><th>カラーパターン</th></tr>
+      <tr th:each="mycategory : ${mycategories}" th:object="${mycategory}" bgcolor="#ffffff" th:bgcolor="*{getColor_pattern()}">
+        <td th:text="*{getName()}">カテゴリ名</td>
+        <td th:text="*{getColor_pattern()}">カラーパターン</td>
+      </tr>
+    </table>
+  </body>
+</html>

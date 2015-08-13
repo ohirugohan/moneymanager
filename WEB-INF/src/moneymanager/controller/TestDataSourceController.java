@@ -7,13 +7,13 @@ import moneymanager.dataaccess.TestDataSource;
 public class TestDataSourceController extends AbstractController {
 
     @Override
-    String getTemplateName() {
+    protected String getTemplateName() {
         // TODO 自動生成されたメソッド・スタブ
         return "testdatasource";
     }
 
     @Override
-    void action() {
+    protected void action() {
         TestDataSource dao = new TestDataSource();
         Connection con = dao.getConnection();
         //String str = con.toString();

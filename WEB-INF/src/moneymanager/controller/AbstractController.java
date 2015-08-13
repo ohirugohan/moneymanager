@@ -16,7 +16,11 @@ abstract class AbstractController extends HttpServlet {
     /**
      * get or post
      */
-    private String mode;
+    private ParameterMethod mode;
+    protected enum ParameterMethod {
+        GET,
+        POST,
+    }
 
     /**
      * テンプレート処理を扱う
@@ -45,18 +49,18 @@ abstract class AbstractController extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        this.setCommonProperty(request, response, "get");
+        this.setCommonProperty(request, response, ParameterMethod.GET);
         this.action();
         this.showTemplate();
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        this.setCommonProperty(request, response, "post");
+        this.setCommonProperty(request, response, ParameterMethod.POST);
         this.action();
         this.showTemplate();
     }
 
-    private void setCommonProperty(HttpServletRequest request, HttpServletResponse response, String mode) throws IOException {
+    private void setCommonProperty(HttpServletRequest request, HttpServletResponse response, ParameterMethod mode) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
@@ -98,9 +102,17 @@ abstract class AbstractController extends HttpServlet {
      * Postパラメータを取得したのか、Getパラメータを取得したのか取得します。
      * @return
      */
-    protected String getMode()
+    protected ParameterMethod getParamaterMethod()
     {
         return this.mode;
+    }
+
+    /**
+     * 仮のユーザーID取得メソッド
+     * @return
+     */
+    protected int getUserId() {
+        return 0;
     }
 
     /**
@@ -130,10 +142,10 @@ abstract class AbstractController extends HttpServlet {
      * この関数の中で、テンプレート名を返してください。
      * @return string
      */
-    abstract String getTemplateName();
+    abstract protected String getTemplateName();
 
     /**
      * この関数内に、実処理を記述してください。
      */
-    abstract void action();
+    abstract protected void action();
 }

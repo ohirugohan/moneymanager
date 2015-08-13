@@ -84,6 +84,22 @@ abstract class AbstractDao {
     }
 
     /**
+     * insert文を実行し、結果を取得します。
+     * @param query
+     * @param queryparameters
+     * @return
+     */
+    protected boolean insert(String query, Object[] queryparameters) {
+        try {
+            PreparedStatement statement = (PreparedStatement)this.connection.prepareStatement(query);
+            statement = this.setQueryParameters(statement, queryparameters);
+            return 0 < statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * プリペアドステートメントをセットします。
      * @param statement
      * @param queryparameters

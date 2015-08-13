@@ -67,4 +67,14 @@
         <url-pattern>/testdatasource</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>MyCategoryController</servlet-name>
+        <servlet-class>moneymanager.controller.MyCategoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyCategoryController</servlet-name>
+        <url-pattern>/mycategory</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -30,7 +30,7 @@
     <br />
     <div th:each="mycategory: ${mycategories}" th:with="category_id=${mycategory.getCategory_id()}">
         <table border="1px" th:with="subcategories_per_parent=${subcategories.get(mycategory.getCategory_id())}">
-          <tr>
+          <tr bgcolor="#ffffff" th:bgcolor="${mycategory.getColor_pattern()}">
               <th colspan="2" th:text="${mycategory.getName()}">カテゴリ名</th>
           </tr>
           <tr th:each="subcategory : ${subcategories_per_parent}">

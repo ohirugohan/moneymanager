@@ -67,9 +67,9 @@
         <form method="post" th:action="'date?target=' + ${date}"  action="date">
             <table>
                 <tr><td><span>カテゴリ:</span>
-                    <select id="parent_category" name="parent_category" th:each="mycategory: ${mycategories}">
+                    <select id="parent_category" name="parent_category">
                         <option value="0">カテゴリ無し</option>
-                        <option value="null" th:value="${mycategory.getCategory_id()}" th:text="${mycategory.getName()}">カテゴリ名</option>
+                        <option th:each="mycategory: ${mycategories}" value="null" th:value="${mycategory.getCategory_id()}" th:text="${mycategory.getName()}">カテゴリ名</option>
                     </select>
                 </td></tr>
                 <tr><td><span>サブカテゴリ:</span>

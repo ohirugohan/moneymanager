@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>日付ごと</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="./js/colorpicker/html5jp/cpick.js"></script>
+    <script type="text/javascript" src="./js/jquery/jquery-2.1.4.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+      $(function() {
+        $("#datepicker").datepicker();
+        $("#datepicker").datepicker("option", "dateFormat", 'yy-mm-dd');
+        var date = /*[[${date}]]*/ '2000-01-01';
+        $("#datepicker").datepicker("setDate", date);
+      });
+    /*]]>*/
+    </script>
+    <script>
+      $(document).ready( function() {
+        $('#parent_category').change(function(){
+          var parent_category_id = $('#parent_category option:selected').val();
+          var sub_category_class = '.sub_categories_' + parent_category_id;
+          $('.sub_category').remove();
+          $(sub_category_class).each(function(index, dom) {
+            var name = $(dom).prop("name");
+            var value = $(dom).prop("value");
+            var option = $('<option></option>').val(value).text(name).addClass('sub_category');
+            $('#sub_category_select').append(option);
+          });
+        });
+      });
+    </script>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" />
+  </head>
+
+  <body>
+    <div>
+        <form method="get" action="date">
+            日付: <input type="text" name="target" id="datepicker" value="2015-01-01"/>
+            <input type="submit" value="移動" />
+        </form>
+    </div>
+    <br />
+    <br />
+    <div>
+        <table border="1px">
+            <tr><th colspan="4" th:text="${date}">日付</th></tr>
+            <tr>
+                <th>品目</th>
+                <th>価格</th>
+                <th>カテゴリ</th>
+                <th>サブ</th>
+            </tr>
+            <tr th:each="expense: ${expenses}" bgcolor="#ffffff" th:bgcolor="${expense.getColor_pattten()}">
+                <td th:text="${expense.getName()}">品目</td>
+                <td th:text="${expense.getValue()}">価格</td>
+                <td th:text="${expense.getCategory_name()}">カテゴリ</td>
+                <td th:text="${expense.getSubcategory_name()}">サブ</td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <br />
+    <div>
+        <form method="post" th:action="'date?target=' + ${date}"  action="date">
+            <table>
+                <tr><td><span>カテゴリ:</span>
+                    <select id="parent_category" name="parent_category" th:each="mycategory: ${mycategories}">
+                        <option value="0">カテゴリ無し</option>
+                        <option value="null" th:value="${mycategory.getCategory_id()}" th:text="${mycategory.getName()}">カテゴリ名</option>
+                    </select>
+                </td></tr>
+                <tr><td><span>サブカテゴリ:</span>
+                    <select id="sub_category_select" name="sub_category">
+                        <option value="0">サブカテゴリ無し</option>
+                    </select>
+                </td></tr>
+                <tr><td><span>品目:</span><input type="text" name="name" size="64"/></td></tr>
+                <tr><td><span>金額:</span><input type="text" name="value" size="10"/></td></tr>
+                <tr><td><span><input type="submit" value="送信" /></span></td></tr>
+            </table>
+            <input type="hidden" name="date" value="null" th:value="${date}" />
+        </form>
+    </div>
+    <div style="visibility:hidden;">
+      <div value="123" th:each="key : ${subcategories.keySet()}" th:with="subcategories_per_parent=${subcategories.get(key)}" >
+        <input type="hidden" th:each="subcategory : ${subcategories_per_parent}" th:class="'sub_categories_' + ${key}" th:value="${subcategory.getSubcategory_id()}" th:name="${subcategory.getName()}" />
+      </div>
+    </div>
+
+
+  </body>
+</html>

@@ -20,19 +20,34 @@ import moneymanager.util.MoneyManagerPropertyUtil;
 abstract class AbstractDao {
 
     private Connection connection;
+    String datasource_name;
 
     public AbstractDao() {
         Properties properties = new MoneyManagerPropertyUtil().getProperties();
-        String datasource_name = properties.getProperty("datasource_name");
+        this.datasource_name = properties.getProperty("datasource_name");
 
+
+    }
+
+    private void connect() {
         try {
             InitialContext ctx = new InitialContext();
             DataSource ds = (DataSource)ctx.lookup("java:comp/env/" + datasource_name);
             this.connection = ds.getConnection();
         } catch (NamingException e) {
+            this.close();
             throw new RuntimeException(e);
         } catch (SQLException e) {
+            this.close();
             throw new RuntimeException(e);
+        }
+    }
+
+    private void close() {
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+
         }
     }
 
@@ -44,6 +59,7 @@ abstract class AbstractDao {
      * @return
      */
     protected <T> T findOne(String query, Object[] queryparameters, Function<ResultSet, T> convertFunc ) {
+        this.connect();
         try {
             PreparedStatement statement = (PreparedStatement)this.connection.prepareStatement(query);
             statement = this.setQueryParameters(statement, queryparameters);
@@ -56,6 +72,8 @@ abstract class AbstractDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            this.close();
         }
     }
 
@@ -68,6 +86,7 @@ abstract class AbstractDao {
      * @return
      */
     protected <T> List<T> findAll(String query, Object[] queryparameters, Function<ResultSet, T> convertFunc ) {
+        this.connect();
         try {
             PreparedStatement statement = (PreparedStatement)this.connection.prepareStatement(query);
             statement = this.setQueryParameters(statement, queryparameters);
@@ -80,6 +99,8 @@ abstract class AbstractDao {
             return ret;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            this.close();
         }
     }
 
@@ -90,12 +111,15 @@ abstract class AbstractDao {
      * @return
      */
     protected boolean insert(String query, Object[] queryparameters) {
+        this.connect();
         try {
             PreparedStatement statement = (PreparedStatement)this.connection.prepareStatement(query);
             statement = this.setQueryParameters(statement, queryparameters);
             return 0 < statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            this.close();
         }
     }
 

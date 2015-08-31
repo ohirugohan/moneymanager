@@ -6,7 +6,7 @@ import java.util.List;
 import moneymanager.bean.UserCategoryBean;
 import moneymanager.controller.validator.StringValidator;
 import moneymanager.controller.validator.ValidationError;
-import moneymanager.dataaccess.UserCategoryDao;
+import moneymanager.service.MyCategoryService;
 
 public class MyCategoryController extends AbstractController {
 
@@ -20,14 +20,13 @@ public class MyCategoryController extends AbstractController {
         // TODO 自動生成されたメソッド・スタブ
 
         int user_id = this.getUserId();
-        UserCategoryDao user_category_dao = new UserCategoryDao();
+        MyCategoryService service = new MyCategoryService();
 
         if(this.getParamaterMethod() == ParameterMethod.POST) {
             this.registerNewCategory();
         }
 
-        List<UserCategoryBean> mycategories;
-        mycategories = user_category_dao.findUserCategories(user_id);
+        List<UserCategoryBean> mycategories = service.get(user_id);
         this.assign("mycategories", mycategories);
 
     }
@@ -45,10 +44,8 @@ public class MyCategoryController extends AbstractController {
 
 
         if (name_errors.isEmpty() && color_errors.isEmpty()) {
-            UserCategoryDao user_category_dao = new UserCategoryDao();
-            int max_category_id = user_category_dao.getMaxCategoryId(user_id);
-            int new_category_id = max_category_id + 1;
-            if(user_category_dao.insertNewCategory(user_id, new_category_id, category_name, color)) {
+            MyCategoryService service = new MyCategoryService();
+            if(service.register(user_id, category_name, color)) {
                 this.debug("新規カテゴリの登録に成功しました。");
             }
 

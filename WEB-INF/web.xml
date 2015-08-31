@@ -77,4 +77,22 @@
         <url-pattern>/mycategory</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>SubCategoryController</servlet-name>
+        <servlet-class>moneymanager.controller.SubCategoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SubCategoryController</servlet-name>
+        <url-pattern>/subcategory</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DateController</servlet-name>
+        <servlet-class>moneymanager.controller.DateController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DateController</servlet-name>
+        <url-pattern>/date</url-pattern>
+    </servlet-mapping>
+
 </web-app>

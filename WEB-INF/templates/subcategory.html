@@ -7,27 +7,7 @@
   </head>
 
   <body>
-    <!--
-    <p th:if="${is_exact_param!=null}">
-        <span th:if="${is_exact_param and is_success_add_item}">データの送信に成功しました</span>
-        <span th:if="${is_exact_param and not is_success_add_item}">データの送信に失敗しました</span>
-        <span th:if="${not is_exact_param}">データの書式が間違っています</span>
-    </p>
-    -->
 
-    <table>
-        <form method="post" action="mycategory">
-            <tr><th>入力フォーム</th></tr>
-            <tr><td><span>親カテゴリー:</span><input type="text" name="name" size="10"/></td></tr>
-            <tr><td><span>サブカテゴリー名:</span><input type="text" name="color" size="10" value="#ffffff" id="t1" class="html5jp-cpick [coloring:true]"/></td></tr>
-            <tr><td><input type="submit" value="送信" /></td></tr>
-        </form>
-    </table>
-
-
-    <br />
-    <p>///////////////////////////////////////////////</p>
-    <br />
     <div th:each="mycategory: ${mycategories}" th:with="category_id=${mycategory.getCategory_id()}">
         <table border="1px" th:with="subcategories_per_parent=${subcategories.get(mycategory.getCategory_id())}">
           <tr bgcolor="#ffffff" th:bgcolor="${mycategory.getColor_pattern()}">

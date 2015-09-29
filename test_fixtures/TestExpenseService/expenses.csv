@@ -1,0 +1,2 @@
+id,user_id,date,name,value,category_id,subcategory_id,register_time,update_time
+1,1,2015-09-01,test,200,0,0,2015-09-01 12:34:56,2015-09-01 12:34:56

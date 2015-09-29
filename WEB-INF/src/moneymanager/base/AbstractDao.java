@@ -1,7 +1,8 @@
-package moneymanager.dataaccess;
+package moneymanager.base;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,35 +16,45 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import moneymanager.base.test.TestMode;
 import moneymanager.util.MoneyManagerPropertyUtil;
 
-abstract class AbstractDao {
+abstract public class AbstractDao {
 
-    private Connection connection;
+    Connection connection;
     String datasource_name;
 
     public AbstractDao() {
         Properties properties = new MoneyManagerPropertyUtil().getProperties();
-        this.datasource_name = properties.getProperty("datasource_name");
-
-
+        if (TestMode.isTest()) {
+            this.datasource_name = properties.getProperty("test_datasource_name");
+        } else {
+            this.datasource_name = properties.getProperty("datasource_name");
+        }
     }
 
-    private void connect() {
+    void connect() {
         try {
-            InitialContext ctx = new InitialContext();
-            DataSource ds = (DataSource)ctx.lookup("java:comp/env/" + datasource_name);
-            this.connection = ds.getConnection();
+            if (TestMode.isTest()) {
+                this.connection = DriverManager.getConnection("jdbc:mysql://localhost/test","testuser","pw");
+                //this.connection = DriverManager.getConnection("java:comp/env/","testuser","pw");
+            } else {
+                InitialContext ctx = new InitialContext();
+                DataSource ds = (DataSource)ctx.lookup("java:comp/env/" + this.datasource_name);
+                this.connection = ds.getConnection();
+            }
         } catch (NamingException e) {
+            e.printStackTrace();
             this.close();
             throw new RuntimeException(e);
         } catch (SQLException e) {
+            e.printStackTrace();
             this.close();
             throw new RuntimeException(e);
         }
     }
 
-    private void close() {
+    void close() {
         try {
             this.connection.close();
         } catch (SQLException e) {

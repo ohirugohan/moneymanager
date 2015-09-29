@@ -1,4 +1,4 @@
-package moneymanager.controller.validator;
+package moneymanager.base.validation;
 
 public enum ValidationErrorType {
     Empty,

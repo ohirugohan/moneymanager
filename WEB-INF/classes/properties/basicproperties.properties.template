@@ -1,1 +1,2 @@
 datasource_name=jdbc/myds
+test_datasource_name=jdbc/testds

@@ -1,5 +1,8 @@
 package moneymanager.controller.validator;
 
+import moneymanager.base.AbstractValidator;
+import moneymanager.base.validation.ValidationErrorType;
+
 /**
  * 整数値のバリデーター
  *

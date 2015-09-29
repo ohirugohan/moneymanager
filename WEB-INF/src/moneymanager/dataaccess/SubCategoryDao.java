@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.function.Function;
 
+import moneymanager.base.AbstractDao;
 import moneymanager.bean.SubCategoryBean;
 
 public class SubCategoryDao extends AbstractDao {

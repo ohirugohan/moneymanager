@@ -1,8 +1,11 @@
-package moneymanager.controller.validator;
+package moneymanager.base;
 
 import java.util.ArrayList;
 
-abstract class AbstractValidator {
+import moneymanager.base.validation.ValidationError;
+import moneymanager.base.validation.ValidationErrorType;
+
+abstract public class AbstractValidator {
 
     private String paramName;
     private String value;

@@ -1,4 +1,7 @@
-package moneymanager.controller.validator;
+package moneymanager.base.validation;
+
+
+
 
 public class ValidationError {
 

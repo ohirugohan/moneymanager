@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.function.Function;
 
+import moneymanager.base.AbstractDao;
 import moneymanager.bean.ExpenseBean;
 
 public class ExpenseDao extends AbstractDao {

@@ -1,4 +1,4 @@
-package moneymanager.controller;
+package moneymanager.base;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +12,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-abstract class AbstractController extends HttpServlet {
+abstract public class AbstractController extends HttpServlet {
     /**
      * get or post
      */

@@ -1,5 +1,8 @@
 package moneymanager.controller.validator;
 
+import moneymanager.base.AbstractValidator;
+import moneymanager.base.validation.ValidationErrorType;
+
 public class StringValidator extends AbstractValidator {
 
     private int maxLength = 0;

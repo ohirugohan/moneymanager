@@ -3,9 +3,10 @@ package moneymanager.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import moneymanager.base.AbstractController;
+import moneymanager.base.validation.ValidationError;
 import moneymanager.bean.UserCategoryBean;
 import moneymanager.controller.validator.StringValidator;
-import moneymanager.controller.validator.ValidationError;
 import moneymanager.service.MyCategoryService;
 
 public class MyCategoryController extends AbstractController {

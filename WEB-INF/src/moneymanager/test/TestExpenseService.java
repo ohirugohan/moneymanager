@@ -23,7 +23,7 @@ public class TestExpenseService extends AbstractTest {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        TestExpenseService.setCsvDataset("./test_fixtures/TestExpenseService");
+        TestExpenseService.setCsvDataset(System.getProperty("user.dir") + "/test_fixtures/TestExpenseService");
     }
 
     @AfterClass

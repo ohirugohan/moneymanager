@@ -49,7 +49,7 @@ public class SubCategoryDao extends AbstractDao {
 
 
     public Integer getMaxSubCategoryId (int user_id, int parent_category_id) {
-        String query = "SELECT MAX(category_id) as max FROM user_subcategories WHERE user_id = ? AND category_id = ?";
+        String query = "SELECT MAX(subcategory_id) as max FROM user_subcategories WHERE user_id = ? AND category_id = ?";
         Object[] query_param = new Object[2];
         query_param[0] = new Integer(user_id);
         query_param[1] = new Integer(parent_category_id);
